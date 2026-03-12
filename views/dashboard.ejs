@@ -1,0 +1,98 @@
+<% layout('layout') %>
+
+<section class="page-header">
+  <div>
+    <h1>Dashboard</h1>
+    <p class="muted">View and manage tickets.</p>
+  </div>
+  <div class="page-header-actions">
+    <a href="/tickets/new" class="btn btn-primary">New Ticket</a>
+  </div>
+</section>
+
+<section class="cards-row">
+  <div class="stat-card">
+    <span class="stat-label">Total tickets</span>
+    <span class="stat-value"><%= tickets.length %></span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">Open</span>
+    <span class="stat-value"><%= tickets.filter(t => t.status === 'open').length %></span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">In progress</span>
+    <span class="stat-value"><%= tickets.filter(t => t.status === 'in_progress').length %></span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">Closed</span>
+    <span class="stat-value"><%= tickets.filter(t => t.status === 'closed').length %></span>
+  </div>
+</section>
+
+<section class="table-card">
+  <div class="table-header">
+    <h2>Tickets</h2>
+  </div>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Created by</th>
+          <th>Assigned to</th>
+          <th>Created</th>
+          <th>Updated</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (tickets.length === 0) { %>
+        <tr>
+          <td colspan="8" class="muted text-center">No tickets yet. Create the first one.</td>
+        </tr>
+        <% } %>
+
+        <% tickets.forEach(t => { %>
+        <tr>
+          <td><%= t.id %></td>
+          <td><%= t.title %></td>
+          <td>
+            <span class="badge badge-<%= t.status %>"><%= t.status %></span>
+          </td>
+          <td><%= t.created_by_name || '—' %></td>
+          <td><%= t.assigned_to_name || 'Unassigned' %></td>
+          <td><%= new Date(t.created_at).toLocaleString() %></td>
+          <td><%= new Date(t.updated_at).toLocaleString() %></td>
+          <td>
+            <details class="inline-details">
+              <summary class="link">Update</summary>
+              <form method="post" action="/tickets/<%= t.id %>/status" class="inline-form">
+                <select name="status" class="form-input form-input-sm">
+                  <option value="open" <%= t.status === 'open' ? 'selected' : '' %>>Open</option>
+                  <option value="in_progress" <%= t.status === 'in_progress' ? 'selected' : '' %>>In progress</option>
+                  <option value="closed" <%= t.status === 'closed' ? 'selected' : '' %>>Closed</option>
+                </select>
+                <select name="assigned_to" class="form-input form-input-sm">
+                  <option value="">Unassigned</option>
+                  <% users.forEach(u => { %>
+                  <option value="<%= u.id %>" <%= t.assigned_to === u.id ? 'selected' : '' %>>
+                    <%= u.username %>
+                  </option>
+                  <% }) %>
+                </select>
+                <button type="submit" class="btn btn-secondary btn-sm">Save</button>
+              </form>
+            </details>
+            <form method="post" action="/tickets/<%= t.id %>/delete" class="inline-form">
+              <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this ticket?');">Delete</button>
+            </form>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+

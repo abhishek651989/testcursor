@@ -1,0 +1,38 @@
+<% layout('layout') %>
+
+<section class="page-header">
+  <div>
+    <h1>New ticket</h1>
+    <p class="muted">Create a new support ticket.</p>
+  </div>
+  <div class="page-header-actions">
+    <a href="/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+  </div>
+</section>
+
+<section class="form-card">
+  <form method="post" action="/tickets" class="form">
+    <label class="form-label">
+      Title
+      <input class="form-input" type="text" name="title" required />
+    </label>
+    <label class="form-label">
+      Description
+      <textarea class="form-input" name="description" rows="4"></textarea>
+    </label>
+    <label class="form-label">
+      Assign to agent
+      <select class="form-input" name="assigned_to">
+        <option value="">Unassigned</option>
+        <% users.forEach(u => { %>
+        <option value="<%= u.id %>"><%= u.username %></option>
+        <% }) %>
+      </select>
+    </label>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Create ticket</button>
+      <a href="/dashboard" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</section>
+

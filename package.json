@@ -1,0 +1,24 @@
+{
+  "name": "ticket-portal",
+  "version": "1.0.0",
+  "description": "Simple ticket portal with agents, login/logout, and ticket status management.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "tickets",
+    "helpdesk",
+    "express",
+    "sqlite"
+  ],
+  "author": "Abhishek Kumar Chourasia",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "sqlite3": "^5.1.7"
+  }
+}
